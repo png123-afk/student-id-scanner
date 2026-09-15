@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student ID Scanner</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #reader {
+      width: 300px;
+      margin: auto;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>📱 Student ID Scanner</h2>
+  <p>Point the camera at a student's QR code.</p>
+
+  <div id="reader"></div>
+
+  <div id="result"></div>
+
+  <script>
+
+    function onScanSuccess(decodedText) {
+
+      document.getElementById("result").innerHTML =
+        "Student ID detected: <b>" + decodedText + "</b><br>" +
+        "Recording...";
+
+      // YOUR APPS SCRIPT WEB APP URL GOES HERE
+      var scriptURL = "https://script.google.com/macros/s/AKfycbzpI8f3TF4QF4Bs3MitFjBBeE1u6csckL06684V9QkY4qOKXWjDmyVp102xsZwqN5vY/exec";
+
+      // Send Student ID to Google Apps Script
+      fetch(scriptURL + "?id=" + encodeURIComponent(decodedText))
+        .then(response => response.text())
+        .then(data => {
+
+          document.getElementById("result").innerHTML =
+            "✅ Recorded!<br>" +
+            "Student ID: <b>" + decodedText + "</b>";
+
+        })
+        .catch(error => {
+
+          document.getElementById("result").innerHTML =
+            "❌ Something went wrong.";
+
+        });
+    }
+
+    function onScanFailure(error) {
+      // Keep scanning
+    }
+
+    var scanner = new Html5QrcodeScanner(
+      "reader",
+      {
+        fps: 10,
+        qrbox: 250
+      },
+      false
+    );
+
+    scanner.render(onScanSuccess, onScanFailure);
+
+  </script>
+
+</body>
+</html>
