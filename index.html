@@ -36,9 +36,20 @@
 
   <script>
 
+    // Prevent the same QR code from being recorded multiple times
+    var hasScanned = false;
+
     function onScanSuccess(decodedText) {
 
-      // Stop the scanner immediately
+      // Ignore any additional detections
+      if (hasScanned) {
+        return;
+      }
+
+      // Lock immediately after the first detection
+      hasScanned = true;
+
+      // Stop the camera scanner
       scanner.clear();
 
       document.getElementById("result").innerHTML =
@@ -67,9 +78,10 @@
     }
 
     function onScanFailure(error) {
-      // Keep scanning
+      // Keep scanning until a QR code is detected
     }
 
+    // Start the QR scanner
     var scanner = new Html5QrcodeScanner(
       "reader",
       {
