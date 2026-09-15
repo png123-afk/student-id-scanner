@@ -38,11 +38,14 @@
 
     function onScanSuccess(decodedText) {
 
+      // Stop the scanner immediately
+      scanner.clear();
+
       document.getElementById("result").innerHTML =
         "Student ID detected: <b>" + decodedText + "</b><br>" +
         "Recording...";
 
-      // YOUR APPS SCRIPT WEB APP URL GOES HERE
+      // Your Google Apps Script Web App URL
       var scriptURL = "https://script.google.com/macros/s/AKfycbzpI8f3TF4QF4Bs3MitFjBBeE1u6csckL06684V9QkY4qOKXWjDmyVp102xsZwqN5vY/exec";
 
       // Send Student ID to Google Apps Script
